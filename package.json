@@ -1,0 +1,23 @@
+{
+  "name": "dwolla-adapter",
+  "version": "1.0.0",
+  "main": "./dist/index.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register src/**/*.spec.ts",
+    "build": "tsc -p ."
+  },
+  "author": "Jonas Hals <contact@jonashals.me>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^12.7.4",
+    "dwolla-v2": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.1",
+    "@types/mocha": "^5.2.7",
+    "chai": "latest",
+    "mocha": "^6.2.0",
+    "ts-node": "^8.3.0",
+    "typescript": "^3.6.2"
+  }
+}
