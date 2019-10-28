@@ -26,10 +26,11 @@ export class SendRequest extends Request {
     destination: string;
     amount: string;
     currency?: string;
+    source?: string;
 }
 
 const ENV = process.env.ENVIRONMENT || "sandbox";
-const ENDPOINT = (ENV.toLowerCase() == "sandbox" ? "https://api-sandbox.dwolla.com" : "https://api.dwolla.com");
+const ENDPOINT = (ENV.toLowerCase() === "sandbox" ? "https://api-sandbox.dwolla.com" : "https://api.dwolla.com");
 const FUNDING_SOURCE = process.env.FUNDING_SOURCE || "";
 
 let client = new dwolla.Client({
@@ -51,14 +52,14 @@ const getTransfer = async (id: string) => {
 
 const sendTransfer = async (data: SendRequest) => {
     return new Promise((resolve, reject) => {
-        if (!('amount' in data) || !('destination' in data) || data.amount.length === 0 || data.destination.length === 0) {
+        if (!('amount' in data) || !('destination' in data) || data.amount.length === 0 || data.destination.length === 0 || (!('source' in data) && FUNDING_SOURCE.length === 0)) {
             return reject({statusCode: 400, data: "missing required parameters"});
         }
 
         let transferRequest = {
             _links: {
                 source: {
-                    href: ENDPOINT + '/funding-sources/' + FUNDING_SOURCE
+                    href: ENDPOINT + '/funding-sources/' + (data.source || FUNDING_SOURCE)
                 },
                 destination: {
                     href: ENDPOINT + '/funding-sources/' + data.destination

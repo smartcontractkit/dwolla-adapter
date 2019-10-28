@@ -31,6 +31,7 @@ zip -r cl-ea.zip .
 | `DWOLLA_APP_KEY`  | **Required**  | Your Dwolla app ID | `EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM` |
 | `DWOLLA_APP_SECRET`  | **Required**  | Your Dwolla app Secret | `EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM` |
 | `API_METHOD` | *Optional* | Set a specific method to use for this adapter. Overwrites `method` in request body. | `sendTransfer` |
+| `FUNDING_SOURCE` | *Optional* | Set a specific funding source for all payments. | `62e88a41-f5d0-4a79-90b3-188cf11a3966` |
 
 ## Testing
 
@@ -57,6 +58,7 @@ Send a money transfer using the Dwolla API.
 |----------|------|---|-------------|
 | `amount` | String | **Required** | Amount to send. |
 | `currency` | String | *Optional* | Three-character ISO-4217 currency code. Defaults to `USD`. |
+| `source` | String | *Optional* | ID of the funding source to send from. Overwrites `FUNDING_SOURCE` env variable. |
 | `destination` | String | **Required** | ID of the funding source to send to. |
 
 #### Response
