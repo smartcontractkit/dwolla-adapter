@@ -39,10 +39,27 @@ let client = new dwolla.Client({
     environment: ENV,
 });
 
+// Convert xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx (32 chars)
+// into xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx format
+const convertToLongUUID = (uuid: string): string => {
+    if (uuid.length != 32)
+        return uuid;
+    let formattedUuid = uuid.substr(0, 8);
+    formattedUuid += "-";
+    formattedUuid += uuid.substr(8, 4);
+    formattedUuid += "-";
+    formattedUuid += uuid.substr(12, 4);
+    formattedUuid += "-";
+    formattedUuid += uuid.substr(16, 4);
+    formattedUuid += "-";
+    formattedUuid += uuid.substr(20, 12);
+    return formattedUuid;
+};
+
 const getTransfer = async (id: string) => {
     return new Promise((resolve, reject) => {
         client.auth.client()
-            .then((appToken: any) => appToken.get(ENDPOINT + "/transfers/" + id))
+            .then((appToken: any) => appToken.get(ENDPOINT + "/transfers/" + convertToLongUUID(id)))
             .then((res: any) => resolve({statusCode: res.status, data: res.body}))
             .catch((err: any) => {
                 reject({statusCode: err.status, data: err.body.message})
@@ -59,10 +76,10 @@ const sendTransfer = async (data: SendRequest) => {
         let transferRequest = {
             _links: {
                 source: {
-                    href: ENDPOINT + '/funding-sources/' + (data.source || FUNDING_SOURCE)
+                    href: ENDPOINT + '/funding-sources/' + convertToLongUUID(data.source || FUNDING_SOURCE)
                 },
                 destination: {
-                    href: ENDPOINT + '/funding-sources/' + data.destination
+                    href: ENDPOINT + '/funding-sources/' + convertToLongUUID(data.destination)
                 }
             },
             amount: {
@@ -79,7 +96,9 @@ const sendTransfer = async (data: SendRequest) => {
                 return resolve({
                     statusCode: res.status,
                     data: {
-                        result: parts[parts.length - 1]
+                        // UUID is given in xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx format
+                        // Convert to xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+                        result: parts[parts.length - 1].replace(/-/g, "")
                     }
                 });
             })
