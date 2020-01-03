@@ -44,16 +44,7 @@ let client = new dwolla.Client({
 const convertToLongUUID = (uuid: string): string => {
     if (uuid.length != 32)
         return uuid;
-    let formattedUuid = uuid.substr(0, 8);
-    formattedUuid += "-";
-    formattedUuid += uuid.substr(8, 4);
-    formattedUuid += "-";
-    formattedUuid += uuid.substr(12, 4);
-    formattedUuid += "-";
-    formattedUuid += uuid.substr(16, 4);
-    formattedUuid += "-";
-    formattedUuid += uuid.substr(20, 12);
-    return formattedUuid;
+    return uuid.replace(/(.{8})(.{4})(.{4})(.{4})(.{12})/, "$1-$2-$3-$4-$5");
 };
 
 const getTransfer = async (id: string) => {
