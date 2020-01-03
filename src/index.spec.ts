@@ -41,7 +41,7 @@ describe('create request', () => {
         it('should get transfer details', () => {
             req.data = <GetRequest>{
                 method: "getTransfer",
-                transfer_id: process.env.TEST_TRANSFER_ID || transferId
+                transfer_id: (process.env.TEST_TRANSFER_ID || transferId).replace(/-/g, "")
             };
             return requestWrapper(req).then((response) => {
                 assert.equal(response.statusCode, 200, "status code");
